@@ -1,6 +1,11 @@
+'use client';
+
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { deleteInvoice } from '@/app/lib/actions';
+import { useState } from 'react';
+import { Button } from "@/components/ui/button"
+import { Trash2 } from 'lucide-react';
 
 export function CreateInvoice() {
   return (
@@ -26,12 +31,19 @@ export function UpdateInvoice({ id }: { id: string }) {
 }
 
 export function DeleteInvoice({ id }: { id: string }) {
+  const [deleting, setDeleting] = useState(false);
+  const d = async () => {
+    // throw new Error('Failed to Delete Invoice');
+    setDeleting(true);
+    await deleteInvoice(id);
+    setDeleting(false);
+  };
   return (
     <>
-      <button type="submit" className="rounded-md border p-2 hover:bg-gray-100" onClick={deleteInvoice.bind(null, id)}>
-        <span className="sr-only">Delete</span>
-        <TrashIcon className="w-5" />
-      </button>
+      <Button size="sm" variant="secondary" disabled={deleting} onClick={d}>
+        <Trash2 />
+        Delete
+      </Button>
     </>
   );
 }
